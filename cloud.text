@@ -1,0 +1,365 @@
+title: OpenNebula | Cloud Computing, in practice
+author: Giovanni Toraldo
+
+%css
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+body {
+  background-image: -webkit-linear-gradient(top left, silver, white);
+  background-image:    -moz-linear-gradient(top left, silver, white);
+  background-image:     -ms-linear-gradient(top left, silver, white);
+  background-image:      -o-linear-gradient(top left, silver, white);
+  background-image:         linear-gradient(top left, silver, white);
+}
+
+.step {
+  width: 800px;
+  height: 600px;
+  padding: 40px 60px;
+
+  font-size: 46px;
+  text-align: center;
+
+  opacity: 0.6;
+}
+
+.step.active {
+  opacity: 1;
+}
+
+.slide {
+  background: white;
+}
+
+code {
+  background-color: yellow;
+  font-size: 14px;
+}
+
+ul,ol,pre {
+  text-align: left;
+}
+
+li {
+  padding-left: 14px;
+}
+
+h2 {
+  margin: 30px auto;
+}
+
+h3 {
+  font-size: 0.5em !important;
+}
+
+#step-1, #step-15 {
+  opacity: 1;
+}
+
+#step-5 li {
+  font-size: 40px;
+}
+
+.center {
+  text-align: center;
+}
+
+%end
+
+
+%%%%%%%%%%%%%%%%%%%
+%% Here we go...
+
+!SLIDE slide x=-9000 y=0 scale=2
+
+## Cloud Computing, in practice.
+
+
+## ![opennebula logo](images/opennebula_logo.png "OpenNebula")
+
+### Giovanni Toraldo
+
+### Sysadmin/Developer for Liberologico
+
+{:.center}
+![](images/liberologico.png)
+
+!SLIDE x=-9000 y=200
+
+!SLIDE slide x=-7000 y=0
+
+## What is OpenNebula?
+
+A tool for serving Infrastructure as a Service (IaaS).
+
+Based on Open Source software, industrial and market standards.
+
+!SLIDE slide x=-7000 y=-1000
+
+## History
+
+{:.center}
+![](images/history.png)
+
+!SLIDE x=-6000 y=3000 scale=4
+
+## OpenNebula Survey 2012
+
+!SLIDE x=-7500 y=3000
+
+## Organizations
+
+![](images/survey_organization.png)
+
+!SLIDE x=-6500 y=3000
+
+## Geographic
+
+![](images/survey_geographic.png)
+
+!SLIDE x=-5500 y=3000
+
+## Type
+
+![](images/survey_type.png)
+
+!SLIDE x=-4500 y=3000
+
+## Workload
+
+![](images/survey_workload.png)
+
+!SLIDE x=-7500 y=4000
+
+## Size
+
+![](images/survey_size.png)
+
+!SLIDE x=-6500 y=4000
+
+## Hypervisor
+
+![](images/survey_hypervisor.png)
+
+!SLIDE x=-5500 y=4000
+
+## Distribution
+
+![](images/survey_linux.png)
+
+!SLIDE x=-4500 y=4000
+
+## Storage
+
+![](images/survey_storage.png)
+
+
+!SLIDE slide x=-6000 y=0
+
+## What provides?
+
+An unified management interface for your infrastructure with:
+
+* Command-line tools
+* Web interfaces (Sunstone/Self-Service)
+* API (XML-RPC, EC2, OCCI)
+
+!SLIDE slide x=-5000 y=-1200 scale=2
+
+## Components
+
+![alt text](images/one_arch.png "Architettura")
+
+!SLIDE x=-5200 y=-800 %% frontend
+!SLIDE x=-4700 y=-1100 %% hosts
+!SLIDE x=-5650 y=-1100 %% nas
+!SLIDE x=-5200 y=-1100 %% serv.network
+!SLIDE x=-4300 y=-1100 %% vm.network
+
+!SLIDE slide x=-4000 y=0
+
+## Frontend
+
+* Monitoring of current status/resources for hosts and VM;
+* Scheduler for VM waiting for deployment;
+* XML-RPC Endpoint;
+* Enforcing ACL for users and groups;
+* Saving current state on MySQL/SQLite database;
+
+!SLIDE slide x=-3000 y=0
+
+## Hosts
+
+Hypervisors natively supported:
+
+KVM, Xen, VMWare ESXi, Amazon EC2
+
+Hypervisors contributed by community:
+
+Virtualbox, Hyper-V, OpenVZ
+
+!SLIDE slide x=-3000 y=800 rotate=180
+
+## Hosts
+
+The unique required components are:
+
+* Password-less SSH access
+* A correctly configured supported hypervisor
+* A recent Ruby interpreter
+
+!SLIDE slide x=-1000 y=0
+
+## Monitoring (IM drivers)
+
+For every hypervisor there is a bunch of specific
+drivers for acquiring resource availability and usage:
+
+* Local checks  (via libvirt)
+* Remote checks (scp/ssh)
+* Ganglia (leveraging its distributed communication system)
+
+!SLIDE slide x=0 y=0
+
+## Networking drivers
+
+* IPtables (whitelist/blacklist)
+* VLAN tagging (802.1Q switches)
+* ebtables (MAC level isolation)
+
+Enterprise production-ready solutions:
+
+* Open vSwitch
+* VMware vSwitch
+
+!SLIDE slide x=1000 y=0
+
+## Storage drivers
+
+* Network filesystem (NFS, GlusterFS..);
+* Local storage (SCP);
+* SAN/ISCSI/LVM block devices;
+* Your custom storage (using basic scripts);
+
+!SLIDE slide x=2000 y=0
+
+## Clustering / Federation
+
+Hosts with homogeneous characteristics can be grouped for:
+
+* Similar Hardware;
+* Similar Hypervisor;
+* Same physical location;
+
+!SLIDE slide x=3000 y=0
+
+## CLI tools examples
+
+<% code do %>
+$ onehost create -i im_kvm
+  -v vmm_kvm -n dummy myhost01
+$ onehost list
+$ oneuser create 
+  my_user my_password
+$ onevm create /path/to/test.vm
+$ onetemplate create
+  /path/to/test.vm
+<% end %>
+
+!SLIDE slide x=4000 y=0
+
+## Templates
+
+An attributes set for defining resources: **VM**, **images**, **networks**.
+
+* Hypervisor-independent (a sort of).
+* Can be stored in a template catalogue.
+
+!SLIDE slide x=5000 y=0
+
+## Template example
+
+<% code do %>
+NAME = test-vm
+MEMORY = 512
+CPU = 0.5
+DISK = [ IMAGE = "ubuntu" ]
+DISK = [ TYPE = swap,
+         SIZE = 1024 ]
+NIC = [ NETWORK = "lan" ]
+<% end %>
+
+!SLIDE x=6000 y=0
+
+## GUI - Sunstone
+
+!SLIDE x=6000 y=100
+
+![alt text](images/sunstone_dashboard.png "Sunstone")
+
+!SLIDE x=6000 y=800
+
+## GUI - Self-Service
+
+!SLIDE x=6000 y=900
+
+![alt text](images/self_service.png "Self Service")
+
+!SLIDE slide x=7000 y=0
+
+## Contextualization
+
+A basic mechanism to configure dynamic parameters during VM boot-up.
+
+* **Basic**: IP address and netmask configuration.
+* **Generic**: a bunch of scripts and binary files, attached as an ISO to the VM.
+
+!SLIDE x=7000 y=1000
+
+![](images/contextualization.png)
+
+!SLIDE slide x=8000 y=0
+
+## Hooks
+
+Automatic execution of scripts after specific events (e.g.: VM launch, host unreachable):
+
+* notifications (e.g: email or twitter);
+* fault tolerance:
+  * Restart instance on VM failure;
+  * Redeploy all instances on host failure;
+
+!SLIDE slide x=9000 y=0
+
+## Goodies
+
+* OpenNebula.org Demo Cloud
+* OpenNebula KVM/VMWare Sandbox
+* Appliance Marketplace
+* OpenNebula 3 Cloud Computing Book
+
+!SLIDE x=-3000 y=-4000 scale=15 rotate=350
+
+## The end
+
+http://twitter.com/gionn
+giovanni@toraldo.net
+
+!SLIDE x=-3000 y=-6500 scale=1 rotate=20
+
+## Powered by:
+
+* **Slide Show (S9)**: a free web alternative to PowerPoint and KeyNote in Ruby. (*http://slideshow.rubyforge.org*)
+* **Impress.js**: presentation framework based on the power of CSS3 transforms (*http://bartaz.github.com/impress.js*)
+
+%% !SLIDE x=3500 y=0 scale=4
+%% !SLIDE x=850 y=3000 rotate=90 scale=5
+%% !SLIDE x=3500 y=2100 rotate=180 scale=6
+%% !SLIDE x=2825 y=2325 z=-3000 rotate=300 scale=1
+
+%% The End
+%%%%%%%%%%%%%%%
